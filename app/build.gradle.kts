@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "ru.btpit.nmedia"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "ru.btpit.nmedia"
