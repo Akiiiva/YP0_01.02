@@ -4,48 +4,56 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.viewModels
+import ru.btpit.nmedia.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    var present_repost = 999;
-    var present_likes = 999;
+    private val postViewModel:PostViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        var likeButton = findViewById<ImageButton>(R.id.imageButton1)
-        var likeText = findViewById<TextView>(R.id.textView8)
-        var isLike = true;
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        likeButton.setOnClickListener {
-            if (isLike)
+        postViewModel.data.observe(this){post ->
+            with(binding)
             {
-              likeButton.setBackgroundResource(R.drawable.red_heart)
-                present_likes++
+                textViewAutor.text = post.author
+                textViewPublshed.text = post.publish
+                textViewcontentPriv.text = post.contentPriv
+                textViewcontent.text = post.content
+                textViewtg.text = post.tg
+                textViewlinktg.text = post.linkTg
+                textViewAmountLike.text = IntToStr(post.amountlike)
+                textViewrepost.text = IntToStr(post.amountRepost)
+                imageButtonLike.setBackgroundResource(
+                    if (post.likeByMe) R.drawable.red_heart
+                    else  R.drawable.heart)
+
             }
-            else
-            {
-                present_likes--
-                likeButton.setBackgroundResource(R.drawable.heart)
-            }
-            likeText.setText(IntToStr(present_likes))
-            isLike = isLike.not()
-        }
-        var repostButton = findViewById<ImageButton>(R.id.imageButton2)
-        var repostText = findViewById<TextView>(R.id.textView9)
-        repostButton.setOnClickListener{
-                present_repost+=1;
-                repostText.setText(IntToStr(present_repost));
         }
 
-    }
-    fun IntToStr(count:Int):String
-    {
-        return when(count)
-        {
-            in 0..999 -> count.toString()
-            in 1000..<1000000 ->((count/100).toFloat()/10).toString() + "К"
-            in 1000000..<1000000000 -> ((count/100000).toFloat()/10).toString() + "М"
-            else -> "Больше МЛРД"
+        binding.imageButtonLike.setOnClickListener{
+            postViewModel.like()
         }
+
+        binding.imageButtonRepost.setOnClickListener {
+            postViewModel.repost()
+        }
+
     }
 
 }
+fun IntToStr(count:Int):String
+{
+    return when(count){
+        in 0..<1_000 -> count.toString()
+        in 1000..<1_100-> "1K"
+        in 1_100..<10_000 -> ((count/100).toFloat()/10).toString() + "K"
+        in 10_000..<1_000_000 -> (count/1_000).toString() + "K"
+        in 1_000_000..<1_100_000 -> "1M"
+        in 1_100_000..<10_000_000 -> ((count/100_000).toFloat()/10).toString() + "M"
+        in 10_000_000..<1_000_000_000 -> (count/1_000_000).toString() + "M"
+        else -> "ꚙ"
+    }
+}
+
