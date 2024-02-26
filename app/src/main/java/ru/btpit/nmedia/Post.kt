@@ -1,7 +1,7 @@
 package ru.btpit.nmedia
 
-class Post (
-        val id: Long,
+data class Post (
+        val id: Int,
         val author: String,
         val publish: String,
         val contentPriv: String,
