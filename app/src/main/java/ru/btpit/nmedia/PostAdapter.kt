@@ -19,8 +19,9 @@ class PostViewHolder(private val binding: PostCardBinding):RecyclerView.ViewHold
         binding.apply {
             textViewAutor.text = post.author
             textViewPublshed.text = post.publish
-            textViewcontentPriv.text = post.content
 
+            textViewcontentPriv.text = post.contentPriv
+            textViewcontent.text = post.content
             textViewAmountLike.text = convertToString(post.amountlike)
             textViewAmountRepost.text = convertToString(post.amountRepost)
 
