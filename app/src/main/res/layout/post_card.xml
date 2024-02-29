@@ -14,17 +14,18 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="0dp"
+            android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_margin="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
-            app:srcCompat="@mipmap/ic_launcher" />
+            android:src="@drawable/heart"/>
 
         <TextView
+            android:ellipsize="end"
+            android:maxLines="1"
             android:id="@+id/textViewAutor"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
@@ -34,7 +35,20 @@
             app:layout_constraintBottom_toTopOf="@+id/textViewPublshed"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="@id/imageView2" />
-
+        <EditText
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:id="@+id/editTextAutor"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="#redraw"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/bly"
+            app:layout_constraintBottom_toBottomOf="@id/textViewAutor"
+            app:layout_constraintStart_toStartOf="@+id/textViewAutor"
+            app:layout_constraintTop_toTopOf="@id/textViewAutor"
+            app:layout_constraintEnd_toEndOf="@id/textViewAutor"/>
         <TextView
             android:id="@+id/textViewPublshed"
             android:layout_width="wrap_content"
@@ -48,15 +62,17 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewAutor" />
 
         <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonMenu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="20dp"
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="@id/imageView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/imageView2"
-            app:srcCompat="@android:drawable/ic_menu_send" />
+            android:src="@drawable/troet"
+            android:scaleType="centerCrop"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/ConstraintLayout3"
@@ -68,25 +84,28 @@
         app:layout_constraintTop_toBottomOf="@id/ConstraintLayout1">
 
         <TextView
-            android:id="@+id/textViewcontentPriv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Приветствуем в нашей группе!"
-            android:layout_marginTop="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
             android:id="@+id/textViewcontent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Чтобы не потерять доступ к полезному контенту для художников, присоединяйтесь в наш Telegram-канал - "
+            android:text="Приветсвуем тебя в нашей группе!\nЧтобы не потерять доступ к полезному контенту для художников, присоединяйтесь в наш Telegram-канал - "
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewcontentPriv" />
-        <TextView android:id="@+id/textViewtg"
+            tools:layout_editor_absoluteY="29dp" />
+        <EditText
+            android:id="@+id/edittextcontent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:hint="Введите текст"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@+id/textViewcontent"
+            app:layout_constraintStart_toStartOf="@+id/textViewcontent"
+            app:layout_constraintTop_toTopOf="@id/textViewcontent"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewcontent"/>
+        <TextView
+            android:id="@+id/textViewtg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Us telegram"
@@ -97,8 +116,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewcontent" />
+        <EditText
+            android:id="@+id/edittexttg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:linksClickable="true"
+            android:textColor="@color/bly"
+            android:hint="Введите ссылку"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@+id/textViewtg"
+            app:layout_constraintStart_toStartOf="@+id/textViewtg"
+            app:layout_constraintTop_toTopOf="@+id/textViewtg"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewtg"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/ConstraintLayout2"
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/ConstraintLayoutImageBorder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
@@ -119,6 +151,7 @@
 
             <TextView
                 android:id="@+id/textView6"
+                android:maxLines="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Telegram канал"
@@ -128,16 +161,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageView3" />
 
-            <TextView
-                android:id="@+id/textViewlinktg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="t.me/#redraw"
-                android:layout_marginStart="20dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView6" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -150,6 +173,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ConstraintLayout3">
+
 
         <ImageButton android:id="@+id/imageButtonLike"
             android:layout_width="30dp"
@@ -212,4 +236,40 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/ConstraintLayout5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHeight_percent="0.5">
+
+        <Button android:id="@+id/buttonCancel"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:text="Отмена"
+            android:background="@drawable/border"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <Button android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="Сохранить"
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

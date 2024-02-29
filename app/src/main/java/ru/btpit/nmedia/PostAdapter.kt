@@ -1,5 +1,6 @@
 package ru.btpit.nmedia
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,19 +19,66 @@ class PostViewHolder(private val binding: PostCardBinding):RecyclerView.ViewHold
     fun bind(post: Post,listener: PostAdapter.Listener) {
         binding.apply {
             textViewAutor.text = post.author
-            textViewPublshed.text = post.publish
+            editTextAutor.setText(post.author)
+            textViewPublshed.text = post.publish.split("GMT")[0]
+            imageButtonMenu.setOnClickListener{
+                listener.onClickMore(post,it, binding)
+            }
 
-            textViewcontentPriv.text = post.contentPriv
-            textViewcontent.text = post.content
+            if (post.content=="")
+                textViewcontent.visibility = View.GONE
+            else{
+                textViewcontent.text = post.content
+                edittextcontent.setText(post.content)
+                textViewcontent.visibility = View.VISIBLE
+            }
             textViewAmountLike.text = convertToString(post.amountlike)
             textViewAmountRepost.text = convertToString(post.amountRepost)
 
+            if (post.tg=="")
+                textView6.visibility = View.GONE
+            else {
+                textView6.text = post.tg
+                textView6.visibility = View.VISIBLE
+            }
+
+
+            if (post.tgS=="")
+                textViewtg.visibility = View.GONE
+            else {
+                textViewtg.text = post.tgS
+                edittexttg.setText(post.tgS)
+                textViewtg.visibility = View.VISIBLE
+            }
+
+
+            imageView2.setImageResource(post.icon)
+
+            if(post.image==0)
+                imageView3.visibility = View.GONE
+            else {
+                imageView3.setImageResource(post.image)
+                imageView3.visibility = View.VISIBLE
+            }
+
+
+            ConstraintLayoutImageBorder.setBackgroundResource(
+                if (post.isBorder) R.drawable.border
+                        else
+                R.drawable.without_border)
             imageButtonLike.setImageResource(if (post.likeByMe) R.drawable.red_heart else R.drawable.heart)
             imageButtonLike.setOnClickListener {
                 listener.onClickLike(post)
             }
             imageButtonRepost.setOnClickListener {
                 listener.onClickRepost(post)
+            }
+
+            buttonCancel.setOnClickListener {
+                listener.cancelEditPost(post,binding)
+            }
+            buttonSave.setOnClickListener {
+                listener.saveEditPost(post,binding)
             }
         }
     }
@@ -50,10 +98,14 @@ class PostAdapter(
     interface Listener{
         fun onClickLike(post: Post)
         fun onClickRepost(post: Post)
+        fun onClickMore(post:Post, view: View,binding: PostCardBinding)
+        fun cancelEditPost(post:Post,binding: PostCardBinding)
+        fun saveEditPost(post:Post, binding: PostCardBinding)
+        fun editModeOn(binding: PostCardBinding)
     }
 }
 
-private fun convertToString(count:Int):String{
+fun convertToString(count:Int):String{
     return when(count){
         in 0..<1_000 -> count.toString()
         in 1000..<1_100-> "1K"
