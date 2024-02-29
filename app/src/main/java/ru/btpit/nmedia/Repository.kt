@@ -18,7 +18,6 @@ interface PostRepository {
     fun removeById(id:Int)
     fun addPost(post:Post)
     fun editById(id:Int, header: String, content: String, url: String)
-    fun shareById(id:Int)
 }
 
 class PostRepositoryInMemoryImpl() : PostRepository {
@@ -99,7 +98,6 @@ class PostRepositoryInMemoryImpl() : PostRepository {
     private val data = MutableLiveData(posts)
 
     override fun getAll(): LiveData<List<Post>> = data
-
     override fun like(id:Int) {
         posts = posts.map {
             if (it.id != id) it else
@@ -107,7 +105,6 @@ class PostRepositoryInMemoryImpl() : PostRepository {
                     it.copy(likeByMe = !it.likeByMe, amountlike = it.amountlike-1)
                 else
                     it.copy(likeByMe = !it.likeByMe, amountlike = it.amountlike+1)
-
         }
         data.value = posts
     }
@@ -163,15 +160,6 @@ class PostRepositoryInMemoryImpl() : PostRepository {
 
         return id
     }
-    override fun shareById(id: Int) {
-        posts = posts.map {
-            if(it.id != id)
-                it
-            else
-                it.copy(amountRepost = it.amountRepost + 10)
-        }
-        data.value = posts
-    }
 }
 
 
@@ -203,9 +191,6 @@ class PostViewModel() : ViewModel() {
     fun addPost(){
             repository.addPost(newPostEmpty)
     }
-
-    fun shareById(id: Int) = repository.shareById(id)
-
     fun editById(id: Int,header: String, content: String, url: String) = repository.editById(id, header, content, url)
 }
 
