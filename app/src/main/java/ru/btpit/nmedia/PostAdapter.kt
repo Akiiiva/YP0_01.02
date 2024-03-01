@@ -20,6 +20,8 @@ class PostViewHolder(private val binding: PostCardBinding):RecyclerView.ViewHold
         binding.apply {
             textViewAutor.text = post.author
             editTextAutor.setText(post.author)
+
+
             textViewPublshed.text = post.publish.split("GMT")[0]
             imageButtonMenu.setOnClickListener{
                 listener.onClickMore(post,it, binding)
@@ -27,11 +29,11 @@ class PostViewHolder(private val binding: PostCardBinding):RecyclerView.ViewHold
 
             if (post.content=="")
                 textViewcontent.visibility = View.GONE
-            else{
-                textViewcontent.text = post.content
-                edittextcontent.setText(post.content)
+            else
                 textViewcontent.visibility = View.VISIBLE
-            }
+            textViewcontent.text = post.content
+            edittextcontent.setText(post.content)
+
             textViewAmountLike.text = convertToString(post.amountlike)
             textViewAmountRepost.text = convertToString(post.amountRepost)
 
@@ -45,12 +47,10 @@ class PostViewHolder(private val binding: PostCardBinding):RecyclerView.ViewHold
 
             if (post.tgS=="")
                 textViewtg.visibility = View.GONE
-            else {
-                textViewtg.text = post.tgS
-                edittexttg.setText(post.tgS)
+            else
                 textViewtg.visibility = View.VISIBLE
-            }
-
+            textViewtg.text = post.tgS
+            edittexttg.setText(post.tgS)
 
             imageView2.setImageResource(post.icon)
 
@@ -95,16 +95,17 @@ class PostAdapter(
         holder.bind(post, listener)
     }
 
+
     interface Listener{
         fun onClickLike(post: Post)
         fun onClickRepost(post: Post)
         fun onClickMore(post:Post, view: View,binding: PostCardBinding)
         fun cancelEditPost(post:Post,binding: PostCardBinding)
         fun saveEditPost(post:Post, binding: PostCardBinding)
-        fun editModeOn(binding: PostCardBinding)
+        fun editModeOn(binding: PostCardBinding, content:String)
+
     }
 }
-
 fun convertToString(count:Int):String{
     return when(count){
         in 0..<1_000 -> count.toString()
