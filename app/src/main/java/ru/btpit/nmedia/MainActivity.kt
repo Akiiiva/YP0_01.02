@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(),PostAdapter.Listener {
         isStartWhitShare()
         val adapter = PostAdapter(this)
         binding.imageButtonAddPost.setOnClickListener {
-            viewModel.addPost()
+            viewModel.addPost("")
             binding.container.smoothScrollToPosition(0)
         }
         binding.container.adapter = adapter
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(),PostAdapter.Listener {
                 .setAction("Окей"){
                     finish()
                 }.show()
-                    // viewModel.addPost(text) // Добавляю новый пост, с полученным сообщением
+                     viewModel.addPost(text) // Добавляю новый пост, с полученным сообщением
             it.action = Intent.ACTION_MAIN //Обнуляю статус передач, и НЕ закрываю приложене
         }
 ///////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(),PostAdapter.Listener {
             when(it.itemId)
             {
                 R.id.menu_item_delete -> viewModel.removeById(post.id)
-                R.id.menu_item_edit -> editModeOn(binding)
+                R.id.menu_item_edit -> editModeOn(binding,"")
             }
             true
 
@@ -128,12 +128,14 @@ class MainActivity : AppCompatActivity(),PostAdapter.Listener {
 
 
 
-    override fun editModeOn(binding: PostCardBinding) {
+    override fun editModeOn(binding: PostCardBinding, content:String) {
         with(binding)
         {
             editTextAutor.visibility = View.VISIBLE
             textViewAutor.visibility = View.INVISIBLE
 
+            if (content!="")
+                edittextcontent.setText(content)
             edittextcontent.visibility = View.VISIBLE
             textViewcontent.visibility = View.INVISIBLE
 

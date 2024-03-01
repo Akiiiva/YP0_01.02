@@ -168,7 +168,7 @@ class PostRepositoryInMemoryImpl() : PostRepository {
 class PostViewModel() : ViewModel() {
 
     private var repository: PostRepository= PostRepositoryInMemoryImpl()
-    private val newPostEmpty = Post(
+    private var newPostEmpty = Post(
         0,
         "Akiva",
         "",
@@ -190,7 +190,8 @@ class PostViewModel() : ViewModel() {
 
     fun removeById(id: Int) = repository.removeById(id)
 
-    fun addPost(){
+    fun addPost(content: String){
+        newPostEmpty = newPostEmpty.copy(content = content)
             repository.addPost(newPostEmpty)
     }
     fun editById(id: Int,header: String, content: String, url: String) = repository.editById(id, header, content, url)

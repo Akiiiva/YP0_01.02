@@ -102,7 +102,7 @@ class PostAdapter(
         fun onClickMore(post:Post, view: View,binding: PostCardBinding)
         fun cancelEditPost(post:Post,binding: PostCardBinding)
         fun saveEditPost(post:Post, binding: PostCardBinding)
-        fun editModeOn(binding: PostCardBinding)
+        fun editModeOn(binding: PostCardBinding, content:String)
 
     }
 }
