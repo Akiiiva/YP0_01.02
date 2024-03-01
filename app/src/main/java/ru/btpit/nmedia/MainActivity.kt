@@ -1,5 +1,6 @@
 package ru.btpit.nmedia
 
+import android.content.Intent
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,16 +9,19 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.PopupMenu
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import ru.btpit.nmedia.databinding.ActivityMainBinding
 import ru.btpit.nmedia.databinding.PostCardBinding
 
 class MainActivity : AppCompatActivity(),PostAdapter.Listener {
     private val viewModel: PostViewModel by viewModels()
+    private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        isStartWhitShare()
         val adapter = PostAdapter(this)
         binding.imageButtonAddPost.setOnClickListener {
             viewModel.addPost()
@@ -28,11 +32,44 @@ class MainActivity : AppCompatActivity(),PostAdapter.Listener {
             adapter.submitList(post)
         }
     }
+    private fun isStartWhitShare(){
+        /////  Если приложение запускается через передачу текстового сообщений
+        intent?.let {
+            if (it.action != Intent.ACTION_SEND) // Если запуск произведён стандартно (ACTION_MAIN)
+                return@let                        // То пропускаем нижний код
+
+            val text = it.getStringExtra(Intent.EXTRA_TEXT) // Получаем текст с которым поделились
+            if(text.isNullOrBlank()) //Если текста нет или "", то выводим сообщение и прерываемся
+            {
+                Snackbar.make(binding.root, "Пусто лол", BaseTransientBottomBar.LENGTH_INDEFINITE)
+                    .setAction("Окей"){
+                        finish()
+                    }.show()
+                return@let
+            }
+            Snackbar.make(binding.root, text, BaseTransientBottomBar.LENGTH_INDEFINITE)
+                .setAction("Окей"){
+                    finish()
+                }.show()
+                    // viewModel.addPost(text) // Добавляю новый пост, с полученным сообщением
+            it.action = Intent.ACTION_MAIN //Обнуляю статус передач, и НЕ закрываю приложене
+        }
+///////////////////////////////////////////////////////////////////////
+    }
     override fun onClickLike(post: Post) {
         viewModel.like(post.id)
     }
     override fun onClickRepost(post: Post) {
         viewModel.repost(post.id)
+
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, post.content)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(intent, "Поделиться")
+        startActivity(shareIntent)
     }
 
     override fun onClickMore(post: Post, view: View, binding: PostCardBinding) {

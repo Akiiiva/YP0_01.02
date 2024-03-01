@@ -21,6 +21,7 @@ class PostViewHolder(private val binding: PostCardBinding):RecyclerView.ViewHold
             textViewAutor.text = post.author
             editTextAutor.setText(post.author)
 
+
             textViewPublshed.text = post.publish.split("GMT")[0]
             imageButtonMenu.setOnClickListener{
                 listener.onClickMore(post,it, binding)
@@ -94,6 +95,7 @@ class PostAdapter(
         holder.bind(post, listener)
     }
 
+
     interface Listener{
         fun onClickLike(post: Post)
         fun onClickRepost(post: Post)
@@ -101,6 +103,7 @@ class PostAdapter(
         fun cancelEditPost(post:Post,binding: PostCardBinding)
         fun saveEditPost(post:Post, binding: PostCardBinding)
         fun editModeOn(binding: PostCardBinding)
+
     }
 }
 fun convertToString(count:Int):String{

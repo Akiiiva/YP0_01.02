@@ -119,6 +119,8 @@ class PostRepositoryInMemoryImpl() : PostRepository {
 
         }
         data.value = posts
+
+
     }
 
     override fun removeById(id: Int) {
