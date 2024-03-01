@@ -155,11 +155,9 @@ class PostRepositoryInMemoryImpl() : PostRepository {
     }
     fun nextId(posts:List<Post>):Int{
         var id = 1
-        posts.forEach{ _ ->
             posts.forEach{
-                if (it.id==id) id=it.id+1
+                if (it.id==id) id++
             }
-        }
 
         return id
     }
