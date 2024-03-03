@@ -58,7 +58,7 @@ class PostRepositoryInMemoryImpl(context: Context) : PostRepository  {
             793,
             9899,
             R.mipmap.ic_sushi,
-            R.drawable.reklama,
+            R.drawable.suhi,
         ),
         Post(
             3,
