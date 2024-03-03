@@ -1,13 +1,17 @@
 package ru.btpit.nmedia
 
+import android.app.Application
 import android.content.Context
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -20,7 +24,13 @@ interface PostRepository {
     fun editById(id:Int, header: String, content: String, url: String)
 }
 
-class PostRepositoryInMemoryImpl() : PostRepository {
+class PostRepositoryInMemoryImpl(context: Context) : PostRepository  {
+    private val gson = Gson()
+    private val prefs =  context.getSharedPreferences("repo", Context.MODE_PRIVATE)
+    private val type = TypeToken.getParameterized(List::class.java, Post::class.java).type
+    private val key = "posts"
+    private var nxtId = 1
+    //private var posts = emptyList<Post>()
     private var posts = listOf(
         Post(
             1,
@@ -35,7 +45,7 @@ class PostRepositoryInMemoryImpl() : PostRepository {
             7999,
             R.mipmap.ic_launcher,
             R.drawable.pixel_art
-            ),
+        ),
         Post(
             2,
             "Анти суши | Суши роллы пицца |",
@@ -47,10 +57,10 @@ class PostRepositoryInMemoryImpl() : PostRepository {
             999,
             793,
             9899,
-            icon = R.mipmap.ic_sushi,
-            image = R.drawable.reklama,
-            ),
-                Post(
+            R.mipmap.ic_sushi,
+            R.drawable.reklama,
+        ),
+        Post(
             3,
             "Bloom",
             "13 минут назад",
@@ -63,7 +73,7 @@ class PostRepositoryInMemoryImpl() : PostRepository {
             R.mipmap.ic_bloom,
             R.drawable.cat,
             false
-            ),
+        ),
 
         Post(
             4,
@@ -94,7 +104,22 @@ class PostRepositoryInMemoryImpl() : PostRepository {
             0,
             false,
         ),
-        )
+    )
+
+    init {
+        prefs.getString(key, null)?.let {
+            posts = gson.fromJson(it,type)
+//            data.value = posts
+
+        }
+    }
+    private fun sync(){
+        with(prefs.edit()){
+            putString(key, gson.toJson(posts))
+            apply()
+        }
+    }
+
     private val data = MutableLiveData(posts)
 
     override fun getAll(): LiveData<List<Post>> = data
@@ -107,6 +132,7 @@ class PostRepositoryInMemoryImpl() : PostRepository {
                     it.copy(likeByMe = !it.likeByMe, amountlike = it.amountlike+1)
         }
         data.value = posts
+        sync()
     }
 
     override fun repost(id:Int) {
@@ -119,13 +145,14 @@ class PostRepositoryInMemoryImpl() : PostRepository {
 
         }
         data.value = posts
-
+        sync()
 
     }
 
     override fun removeById(id: Int) {
         posts = posts.filter { it.id != id }
         data.value = posts
+        sync()
     }
 
     override fun addPost(post: Post) {
@@ -139,6 +166,7 @@ class PostRepositoryInMemoryImpl() : PostRepository {
             )
         ) + posts
         data.value = posts
+        sync()
     }
 
     override fun editById(id: Int,header: String, content: String, url: String) {
@@ -151,11 +179,15 @@ class PostRepositoryInMemoryImpl() : PostRepository {
             }
         }
         data.value = posts
+        sync()
     }
     fun nextId(posts:List<Post>):Int{
         var id = 1
-            posts.forEach{
-                if (it.id==id) id++
+            posts.forEach{_->
+                posts.forEach{
+                    if (it.id==id) id=it.id+1
+                }
+
             }
 
         return id
@@ -163,9 +195,9 @@ class PostRepositoryInMemoryImpl() : PostRepository {
 }
 
 
-class PostViewModel() : ViewModel() {
+class PostViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository: PostRepository = PostRepositoryInMemoryImpl(application)
 
-    private var repository: PostRepository= PostRepositoryInMemoryImpl()
     private var newPostEmpty = Post(
         0,
         "Akiva",

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_item_post"
+        android:title="Рекомендации"
+        android:icon="@drawable/menu_icon"/>
+    <item android:id="@+id/menu_item_profil"
+        android:title="Профиль"
+        android:icon="@drawable/profil"/>
+</menu>

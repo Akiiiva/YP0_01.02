@@ -2,6 +2,7 @@ package ru.btpit.nmedia
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,10 @@ class PostViewHolder(private val binding: PostCardBinding):RecyclerView.ViewHold
             textViewAutor.text = post.author
             editTextAutor.setText(post.author)
 
+            binding.root.setOnClickListener {
+                if (post.author == "Akiva")
+                    it.findNavController().navigate(R.id.action_menu_item_post_to_menu_item_profil)
+            }
 
             textViewPublshed.text = post.publish.split("GMT")[0]
             imageButtonMenu.setOnClickListener{
